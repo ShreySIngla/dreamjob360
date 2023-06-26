@@ -4,6 +4,7 @@
 
 <head>
     <meta charset="utf-8">
+
     <title>DreamJob - Job Portal Website Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
@@ -30,6 +31,13 @@
 
     <!-- Template Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script> {% endcomment %}
+    
+
 </head>
 
 <body>
@@ -112,7 +120,7 @@
 
 
         <!-- Header End -->
-        <div class="container-xxl py-5 bg-dark page-header mb-5">
+         <div class="container-xxl py-5 bg-dark page-header mb-5">
             <div class="container my-5 pt-5 pb-4">
                 <h1 class="display-3 text-white mb-3 animated slideInDown">Register</h1>
                 <nav aria-label="breadcrumb">
@@ -123,9 +131,175 @@
                     </ol>
                 </nav>
             </div>
-        </div>
+        </div> 
         <!-- Header End -->
 
+             <div class="container-xxl py-5">
+                <div class="container">
+                  <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Register</h1>
+                  <div class="container">
+                    <div class="row justify-content-center">
+                      <div class="col-md-10">
+                        <div class="wow fadeInUp" data-wow-delay="0.5s">
+                          <br>
+                          <form method="POST" id="registration-form">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                              <div class="col-12">
+                                <div id="success_fail_info">
+                                  {% if error %}
+                                  <p>{{ error }}</p>
+                                  {% endif %}
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-floating">
+                                  <input type="text" name="name" class="form-control" id="name" placeholder="name" >
+                                  <label for="name">Name</label>
+                                </div>
+                                <div id="name-error" class="error-message" style="color: red"></div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-floating">
+                                  <input type="text" name="username" class="form-control" id="username" placeholder="username" >
+                                  <label for="username">Username</label>
+                                </div>
+                                <div id="username-error" class="error-message" style="color: red"></div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-floating">
+                                    {% comment %} <input type="email" name="email" class="form-control" id="email" placeholder="Your Email" > {% endcomment %}
+                                  <input type="text" name="email" class="form-control" id="email" placeholder="Your Email" >
+                                  <label for="email">Email</label>
+                                </div>
+                                <div id="email-error" class="error-message" style="color: red"></div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-floating">
+                                  <input type="password" name="password" class="form-control" id="password" placeholder="Password" >
+                                  <label for="password">Password</label>
+                                </div>
+                                <div id="password-error" class="error-message" style="color: red"></div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-floating">
+                                  <input type="password" name="confirm_password" class="form-control" id="confirm-password" placeholder="Confirm Password" >
+                                  <label for="confirm-password">Confirm Password</label>
+                                </div>
+                                <div id="confirm-password-error" class="error-message" style="color: red"></div>
+                              </div>
+                              <div class="col-12">
+                                <div class="container">
+                                  <div class="row justify-content-center">
+                                    <div class="col-6">
+                                      <button class="btn btn-primary w-100 py-3" type="submit">Register</button>
+                                      <br><br><br>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <script>
+              document.addEventListener("DOMContentLoaded", function() {
+                const form = document.getElementById("registration-form");
+                const nameInput = document.getElementById("name");
+                const usernameInput = document.getElementById("username");
+                const emailInput = document.getElementById("email");
+                const passwordInput = document.getElementById("password");
+                const confirmPasswordInput = document.getElementById("confirm-password");
+              
+                form.addEventListener("submit", function(event) {
+                  event.preventDefault();
+              
+                  if (validateForm()) {
+                    // Form is valid, you can proceed with form submission
+                    form.submit();
+                  }
+                });
+              
+                function validateForm() {
+                  let isValid = true;
+              
+                  // Reset error messages
+                  resetErrorMessages();
+              
+                  // Validate name field
+                  if (!nameInput.value) {
+                    displayErrorMessage("name", "Please enter your name.");
+                    isValid = false;
+                  }
+              
+                  // Validate username field
+                  if (!usernameInput.value) {
+                    displayErrorMessage("username", "Please enter your username.");
+                    isValid = false;
+                  }
+              
+                  // Validate email field
+                  if (!emailInput.value) {
+                    displayErrorMessage("email", "Please enter your email address.");
+                    isValid = false;
+                  } else if (!isValidEmail(emailInput.value)) {
+                    displayErrorMessage("email", "Please enter a valid email address.");
+                    isValid = false;
+                  }
+              
+                  // Validate password field
+                  if (!passwordInput.value) {
+                    displayErrorMessage("password", "Please enter a password.");
+                    isValid = false;
+                  }
+              
+                  // Validate confirm password field
+                  if (!confirmPasswordInput.value) {
+                    displayErrorMessage("confirm-password", "Please confirm your password.");
+                    isValid = false;
+                  } else if (confirmPasswordInput.value !== passwordInput.value) {
+                    displayErrorMessage("confirm-password", "Passwords do not match.");
+                    isValid = false;
+                  }
+              
+                  return isValid;
+                }
+                function isValidEmail(email) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailRegex.test(email);
+                }
+                  
+                //function isValidEmail(email) {
+                 // // Email validation logic (you can use a regular expression or other methods)
+               //   return true;
+               // }
+              
+                function displayErrorMessage(inputName, message) {
+                  const errorMessageElement = document.getElementById(inputName + "-error");
+                  errorMessageElement.textContent = message;
+                }
+              
+                function resetErrorMessages() {
+                  const errorMessages = document.getElementsByClassName("error-message");
+                  for (let i = 0; i < errorMessages.length; i++) {
+                    errorMessages[i].textContent = "";
+                  }
+                }
+              });
+              </script>
+              
+              
+        
+
+
+
+
+{% comment %} 
         <div class="container-xxl py-5">
             <div class="container">
                 <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Register</h1>
@@ -192,7 +366,7 @@
                 </div>
             </div>
         </div>
-        
+         {% endcomment %}
         
         {% comment %} <form method="POST" id="registration-form">
             {% csrf_token %}
@@ -326,8 +500,16 @@
 <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
 <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
 
+
+
+
 <!-- Template Javascript -->
 <script src="{% static 'js/main.js' %}"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% comment %} <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script> {% endcomment %}
+
 </body>
 
 </html>
+
